@@ -1,0 +1,8 @@
+{
+  "name": "IELTS Reading - The Rufous Hare-Wallaby",
+  "description": "Interactive IELTS Reading practice and test simulation for Reading Passage 1: The Rufous Hare-Wallaby (Questions 1–13), with 20-minute timer, text highlighter, flow chart completion, and bilingual explanations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
