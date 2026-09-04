@@ -330,48 +330,50 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
 
         <div className="flex items-center space-x-3">
           {/* Language preference for explanations & tips */}
-          <div className="flex items-center bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs text-[11px]">
-            <span className="px-1.5 text-slate-400 flex items-center gap-1 font-medium">
-              <Languages className="w-3 h-3 text-blue-600" />
-              <span className="hidden md:inline">Language:</span>
-            </span>
-            <button
-              id="lang-bilingual-btn"
-              onClick={() => setExplanationLanguage('bilingual')}
-              className={`px-2 py-0.5 rounded font-semibold transition-all cursor-pointer ${
-                explanationLanguage === 'bilingual'
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-              title="Song ngữ (Bilingual English & Vietnamese)"
-            >
-              Song ngữ
-            </button>
-            <button
-              id="lang-vi-btn"
-              onClick={() => setExplanationLanguage('vi')}
-              className={`px-2 py-0.5 rounded font-semibold transition-all cursor-pointer ${
-                explanationLanguage === 'vi'
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-              title="Tiếng Việt (Vietnamese focus)"
-            >
-              Tiếng Việt
-            </button>
-            <button
-              id="lang-en-btn"
-              onClick={() => setExplanationLanguage('en')}
-              className={`px-2 py-0.5 rounded font-semibold transition-all cursor-pointer ${
-                explanationLanguage === 'en'
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-              title="English only"
-            >
-              English
-            </button>
-          </div>
+          {(mode === 'practice' || isSubmitted) && (
+            <div className="flex items-center bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs text-[11px]">
+              <span className="px-1.5 text-slate-400 flex items-center gap-1 font-medium">
+                <Languages className="w-3 h-3 text-blue-600" />
+                <span className="hidden md:inline">Language:</span>
+              </span>
+              <button
+                id="lang-bilingual-btn"
+                onClick={() => setExplanationLanguage('bilingual')}
+                className={`px-2 py-0.5 rounded font-semibold transition-all cursor-pointer ${
+                  explanationLanguage === 'bilingual'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Song ngữ (Bilingual English & Vietnamese)"
+              >
+                Song ngữ
+              </button>
+              <button
+                id="lang-vi-btn"
+                onClick={() => setExplanationLanguage('vi')}
+                className={`px-2 py-0.5 rounded font-semibold transition-all cursor-pointer ${
+                  explanationLanguage === 'vi'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Tiếng Việt (Vietnamese focus)"
+              >
+                Tiếng Việt
+              </button>
+              <button
+                id="lang-en-btn"
+                onClick={() => setExplanationLanguage('en')}
+                className={`px-2 py-0.5 rounded font-semibold transition-all cursor-pointer ${
+                  explanationLanguage === 'en'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="English only"
+              >
+                English
+              </button>
+            </div>
+          )}
 
           <div className="text-xs font-medium text-slate-500">
             Answered:{' '}
@@ -534,8 +536,9 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
         {/* ========================================================= */}
         {/* EXAM STRATEGY: REVIEW, USEFUL STRATEGIES & ERROR ANALYSIS */}
         {/* ========================================================= */}
-        <div className="space-y-3">
-          {/* Review Box: 4 Questions from page 1 */}
+        {mode === 'practice' && (
+          <div className="space-y-3">
+            {/* Review Box: 4 Questions from page 1 */}
           <div className="border border-indigo-200 bg-indigo-50/70 rounded-xl overflow-hidden shadow-2xs">
             <button
               id="toggle-review-box-btn"
@@ -918,6 +921,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
             </div>
           </div>
         </div>
+        )}
 
         {/* ========================================================= */}
         {/* PART 1: Questions 1–5 (Flow Chart Completion)             */}
@@ -939,7 +943,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
               <p className="text-xs text-slate-300 mt-1 font-medium">
                 Choose <span className="underline font-bold text-amber-300">NO MORE THAN THREE WORDS AND/OR A NUMBER</span> from the passage for each answer. Write your answers in boxes 1–5 on your answer sheet.
               </p>
-              {explanationLanguage !== 'en' && (
+              {(mode === 'practice' || isSubmitted) && explanationLanguage !== 'en' && (
                 <p className="text-[11px] text-blue-300/90 mt-1.5 italic">
                   Hướng dẫn: Chọn KHÔNG QUÁ BA TỪ VÀ/HOẶC MỘT CON SỐ từ bài đọc cho mỗi đáp án.
                 </p>
@@ -995,8 +999,9 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
               explanationLanguage={explanationLanguage}
             />
 
-            {/* Questions 1-5 Detailed Cards */}
-            <div className="space-y-4">
+            {/* Questions 1-5 Detailed Cards (Practice & Post-Exam Review) */}
+            {(mode === 'practice' || isSubmitted) && (
+              <div className="space-y-4">
               {part1Questions.map((q) => {
                 const answer = userAnswers[q.id] || '';
                 const wordCount = answer.trim().split(/\s+/).filter(Boolean).length;
@@ -1030,7 +1035,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
                           <p className="text-sm font-semibold text-slate-900 leading-snug">
                             {renderHighlightedText(q.prompt, q.id)}
                           </p>
-                          {explanationLanguage !== 'en' && q.promptVi && (
+                          {(mode === 'practice' || isSubmitted) && explanationLanguage !== 'en' && q.promptVi && (
                             <p className="text-xs text-slate-500 italic mt-0.5">
                               🇻🇳 {q.promptVi}
                             </p>
@@ -1119,7 +1124,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
                           value={answer}
                           onChange={(e) => onAnswerChange(q.id, e.target.value)}
                           disabled={isSubmitted && mode === 'test'}
-                          placeholder="Type NO MORE THAN THREE WORDS..."
+                          placeholder={mode === 'test' && !isSubmitted ? '' : 'Type answer...'}
                           className={`w-full px-3.5 py-2 text-sm rounded-lg border font-medium outline-none transition-all ${
                             isChecked
                               ? isCorrect
@@ -1128,7 +1133,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
                               : 'border-slate-300 bg-white hover:border-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-slate-900'
                           }`}
                         />
-                        {isOverLimit && (
+                        {(mode === 'practice' || isSubmitted) && isOverLimit && (
                           <div className="flex items-center gap-1 text-[11px] text-rose-600 font-semibold mt-1">
                             <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
                             <span>Exceeds word limit: {wordCount}/3 words!</span>
@@ -1223,6 +1228,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
                 );
               })}
             </div>
+            )}
           </div>
         )}
 
@@ -1246,7 +1252,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
               <p className="text-xs text-slate-300 mt-1 font-medium">
                 Choose <span className="underline font-bold text-amber-300">NO MORE THAN THREE WORDS AND/OR A NUMBER</span> from the passage for each answer. Write your answers in boxes 6–9 on your answer sheet.
               </p>
-              {explanationLanguage !== 'en' && (
+              {(mode === 'practice' || isSubmitted) && explanationLanguage !== 'en' && (
                 <p className="text-[11px] text-blue-300/90 mt-1.5 italic">
                   Hướng dẫn: Chọn KHÔNG QUÁ BA TỪ VÀ/HOẶC MỘT CON SỐ từ bài đọc cho mỗi câu trả lời.
                 </p>
@@ -1324,7 +1330,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
                           <p className="text-sm font-semibold text-slate-900 leading-snug">
                             {renderHighlightedText(q.prompt, q.id)}
                           </p>
-                          {explanationLanguage !== 'en' && q.promptVi && (
+                          {(mode === 'practice' || isSubmitted) && explanationLanguage !== 'en' && q.promptVi && (
                             <p className="text-xs text-slate-500 italic mt-0.5">
                               🇻🇳 {q.promptVi}
                             </p>
@@ -1413,7 +1419,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
                           value={answer}
                           onChange={(e) => onAnswerChange(q.id, e.target.value)}
                           disabled={isSubmitted && mode === 'test'}
-                          placeholder="Type answer (NO MORE THAN 3 WORDS)..."
+                          placeholder={mode === 'test' && !isSubmitted ? '' : 'Type answer...'}
                           className={`w-full px-3.5 py-2 text-sm rounded-lg border font-medium outline-none transition-all ${
                             isChecked
                               ? isCorrect
@@ -1422,7 +1428,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
                               : 'border-slate-300 bg-white hover:border-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-slate-900'
                           }`}
                         />
-                        {isOverLimit && (
+                        {(mode === 'practice' || isSubmitted) && isOverLimit && (
                           <div className="flex items-center gap-1 text-[11px] text-rose-600 font-semibold mt-1">
                             <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
                             <span>Exceeds word limit: {wordCount}/3 words!</span>
@@ -1542,15 +1548,15 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
               <div className="text-xs text-slate-300 mt-2.5 space-y-1.5 font-medium bg-slate-800/80 p-3 rounded-lg border border-slate-700">
                 <p>
                   <strong className="text-emerald-400 font-bold">TRUE</strong> — if the statement agrees with the information
-                  {explanationLanguage !== 'en' && <span className="text-slate-400 italic ml-1">(khẳng định đúng theo bài đọc)</span>}
+                  {(mode === 'practice' || isSubmitted) && explanationLanguage !== 'en' && <span className="text-slate-400 italic ml-1">(khẳng định đúng theo bài đọc)</span>}
                 </p>
                 <p>
                   <strong className="text-rose-400 font-bold">FALSE</strong> — if the statement contradicts the information
-                  {explanationLanguage !== 'en' && <span className="text-slate-400 italic ml-1">(khẳng định mâu thuẫn/trái ngược với bài đọc)</span>}
+                  {(mode === 'practice' || isSubmitted) && explanationLanguage !== 'en' && <span className="text-slate-400 italic ml-1">(khẳng định mâu thuẫn/trái ngược với bài đọc)</span>}
                 </p>
                 <p>
                   <strong className="text-amber-400 font-bold">NOT GIVEN</strong> — if there is no information on this
-                  {explanationLanguage !== 'en' && <span className="text-slate-400 italic ml-1">(không có thông tin để xác thực)</span>}
+                  {(mode === 'practice' || isSubmitted) && explanationLanguage !== 'en' && <span className="text-slate-400 italic ml-1">(không có thông tin để xác thực)</span>}
                 </p>
               </div>
             </div>
@@ -1624,7 +1630,7 @@ export const QuestionsView: React.FC<QuestionsViewProps> = ({
                           <p className="text-sm font-semibold text-slate-900 leading-snug">
                             {renderHighlightedText(q.prompt, q.id)}
                           </p>
-                          {explanationLanguage !== 'en' && q.promptVi && (
+                          {(mode === 'practice' || isSubmitted) && explanationLanguage !== 'en' && q.promptVi && (
                             <p className="text-xs text-slate-500 italic mt-0.5">
                               🇻🇳 {q.promptVi}
                             </p>
